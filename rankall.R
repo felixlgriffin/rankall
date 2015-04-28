@@ -59,3 +59,4 @@ if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneum
 ## For each state, find the hospital of the given rank
 
 ## ties.method = c("average", "first", "random", "max", "min"))
+## I made a minor change to see how git handles this versioning
