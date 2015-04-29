@@ -19,14 +19,18 @@ if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneum
         hs[i,7] <- data[i,17]
         hs[i,8] <- data[i,23]
     }
-
 ## Make state data frames
     unique_States <- sort(unique(hs$State))
     for (i in 1:length(unique_States)) {
         subState <- split(hs, hs$State)
     }
-
-## Begin the ranking by outcome
+##Set the Ranks per state for each outcome
+for (i in 1:length(unique_States)) {
+        subState[[i]]["HA.Rank"] <- rank(subState[[i]]["HA.Mor.Rate"])
+        subState[[i]]["HF.Rank"] <- rank(subState[[i]]["HF.Mor.Rate"])
+        subState[[i]]["PN.Rank"] <- rank(subState[[i]]["PN.Mor.Rate"])
+    }
+ ## Begin the ranking by outcome
     if (outcome == "heart attack") {
 
     return(subState)
