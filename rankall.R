@@ -26,13 +26,20 @@ if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneum
     }
 ##Set the Ranks per state for each outcome
 for (i in 1:length(unique_States)) {
-        subState[[i]]["HA.Rank"] <- rank(subState[[i]]["HA.Mor.Rate"])
-        subState[[i]]["HF.Rank"] <- rank(subState[[i]]["HF.Mor.Rate"])
-        subState[[i]]["PN.Rank"] <- rank(subState[[i]]["PN.Mor.Rate"])
+        subState[[i]]["HA.Rank"] <- rank(subState[[i]]["HA.Mor.Rate"],ties.method="first")
+        subState[[i]]["HF.Rank"] <- rank(subState[[i]]["HF.Mor.Rate"],ties.method="first")
+        subState[[i]]["PN.Rank"] <- rank(subState[[i]]["PN.Mor.Rate"],ties.method="first")
     }
  ## Begin the ranking by outcome
     if (outcome == "heart attack") {
+        x <- vector("numeric",length=length(unique_States))
+        for (i in 1:length(unique_States)) {
+            x <- which(subState[[i]]["HA.Rank"]==num)
+            print(subState[[i]][x,])
+        }
+        for (i in 1:length(unique_States)) {
 
+        }
     return(subState)
     #return(hs[1:2])
     }
