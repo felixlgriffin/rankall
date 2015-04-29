@@ -34,11 +34,11 @@ for (i in 1:length(unique_States)) {
     if (outcome == "heart attack") {
         x <- vector("numeric",length=length(unique_States))
         for (i in 1:length(unique_States)) {
-            x <- which(subState[[i]]["HA.Rank"]==num)
-            print(subState[[i]][x,])
+            x[i] <- which(subState[[i]]["HA.Rank"]==num)
+            #print(subState[[i]][x,1:2])
         }
-        for (i in 1:length(unique_States)) {
-
+        for (i in 1: length(x)) {
+            subState[[i]] <- subState[[i]][x[i],1:2]
         }
     return(subState)
     #return(hs[1:2])
