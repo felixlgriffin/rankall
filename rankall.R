@@ -12,24 +12,20 @@ if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneum
     for (i in 1: nrow(data)) {
         hs[i,1] <- data$Hospital.Name[i]
         hs[i,2] <- data$State[i]
-        hs[i,3] <- NA
-        hs[i,4] <- NA
-        hs[i,5] <- NA
+        hs[i,3] <- NA  ##Heart Attack Mor. Rate Ranking (calculated field)
+        hs[i,4] <- NA  ##Heart Failure Mor. Rate Ranking (calculated field)
+        hs[i,5] <- NA  ##Pneumonia Mor. Rate Ranking (calculated field)
         hs[i,6] <- data[i,11]
         hs[i,7] <- data[i,17]
         hs[i,8] <- data[i,23]
     }
-#       hs[,3] <- rank(hs[,6])
-#     hs[,4] <- rank(hs[,7])
-#     hs[,5] <- rank(hs[,8])
+
 ## Make state data frames
     unique_States <- sort(unique(hs$State))
     for (i in 1:length(unique_States)) {
         subState <- split(hs, hs$State)
     }
-#     for (i in 1:length(subState)) {
-#         subState[i][,3] <- rank(subState[i][,6])
-#     }
+
 ## Begin the ranking by outcome
     if (outcome == "heart attack") {
 
@@ -59,4 +55,4 @@ if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneum
 ## For each state, find the hospital of the given rank
 
 ## ties.method = c("average", "first", "random", "max", "min"))
-## I made a minor change to see how git handles this versioning
+
