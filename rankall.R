@@ -25,33 +25,39 @@ if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneum
         subState <- split(hs, hs$State)
     }
 ##Set the Ranks per state for each outcome
-for (i in 1:length(unique_States)) {
+    for (i in 1:length(unique_States)) {
         subState[[i]]["HA.Rank"] <- rank(subState[[i]]["HA.Mor.Rate"],ties.method="first")
         subState[[i]]["HF.Rank"] <- rank(subState[[i]]["HF.Mor.Rate"],ties.method="first")
         subState[[i]]["PN.Rank"] <- rank(subState[[i]]["PN.Mor.Rate"],ties.method="first")
     }
+    if (num == "best") {num <- 1}
  ## Begin the ranking by outcome
     if (outcome == "heart attack") {
         x <- vector("numeric",length=length(unique_States))
         for (i in 1:length(unique_States)) {
-            x[i] <- which(subState[[i]]["HA.Rank"]==num)
-            #print(subState[[i]][x,1:2])
+            ##check to make sure there is a hospital with the requested ranking
+            noHospWithNumRank <- tryCatch(
+                x[i] <- which(subState[[i]]["HA.Rank"]==num),
+                error=function(e) e
+            )
+            if(!inherits(noHospWithNumRank, "error")) {
+            ##returns 0 rows for this state if there is not a hospital with requested rating
+            }
         }
         for (i in 1: length(x)) {
             subState[[i]] <- subState[[i]][x[i],1:2]
         }
     return(subState)
-    #return(hs[1:2])
     }
 ## end outcome heart attack
     if (outcome == "heart failure") {
 
-    return(hs[1:2])
+
     }
 ## end outcome heart failure
     if (outcome == "pneumonia") {
 
-    return(hs[1:2])
+
     }
 ## end outcome pneumonia
 ## End the ranking by outcome
@@ -62,8 +68,4 @@ for (i in 1:length(unique_States)) {
     #return(hs)
 }
 
-## Check that state and outcome are valid
-## For each state, find the hospital of the given rank
-
-## ties.method = c("average", "first", "random", "max", "min"))
 
