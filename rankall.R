@@ -2,9 +2,9 @@ rankall <- function(outcome, num = "best") {
 data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
 ## Check to ensure outcome is correct (this is a large loop encapsulating most of the code)
 if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneumonia") {
-## Initialize the working data frame "hs" - stands for "Hospital | State" - which is the required output of the function) with the subset of data we'll be working with.  The end result of each "if (outcome == "xxx) {}" code blocks below should be just the first two columns of this data frame.
+## Initialize the working data frame "hs" - stands for "Hospital | State" - which is the required output of the function) with the subset of data we'll be working with.  The end result of each "if (outcome == "xxx) {}" code blocks below should be just the first two columns of this data frame for each state.
     hs <- data.frame(Hospital=character(),State=character(),HA.Rank=integer(),HF.Rank=integer(),PN.Rank=integer(),HA.Mor.Rate=integer(),HF.Mor.Rate=integer(),PN.Mor.Rate=integer(),stringsAsFactors=FALSE)
-## the columns that contain comparison data needs to be converted from string to numeric
+## the columns that contain comparison data need to be converted from string to numeric
     data[,11] <- as.numeric(data[,11])
     data[,17] <- as.numeric(data[,17])
     data[,23] <- as.numeric(data[,23])
@@ -44,20 +44,73 @@ if (outcome == "heart attack" || outcome == "heart failure" || outcome == "pneum
             ##returns 0 rows for this state if there is not a hospital with requested rating
             }
         }
+        final <- data.frame(hospital=character(),state=character(),stringsAsFactors=FALSE)
         for (i in 1: length(x)) {
             subState[[i]] <- subState[[i]][x[i],1:2]
+            noHospWithNumRank <- tryCatch(
+                final[i,] <- subState[[i]],
+                error=function(e) e
+            )
+            if(!inherits(noHospWithNumRank, "error")) {
+                ##returns 0 rows for this state if there is not a hospital with requested rating
+            }
         }
     return(subState)
+    #return(final)
     }
 ## end outcome heart attack
     if (outcome == "heart failure") {
+        x <- vector("numeric",length=length(unique_States))
+        for (i in 1:length(unique_States)) {
+            ##check to make sure there is a hospital with the requested ranking
+            noHospWithNumRank <- tryCatch(
+                x[i] <- which(subState[[i]]["HF.Rank"]==num),
+                error=function(e) e
+            )
+            if(!inherits(noHospWithNumRank, "error")) {
+                ##returns 0 rows for this state if there is not a hospital with requested rating
+            }
+        }
 
-
+        final <- data.frame(hospital=character(),state=character(),stringsAsFactors=FALSE)
+        for (i in 1: length(x)) {
+            subState[[i]] <- subState[[i]][x[i],1:2]
+            noHospWithNumRank <- tryCatch(
+                final[i,] <- subState[[i]],
+                error=function(e) e
+            )
+            if(!inherits(noHospWithNumRank, "error")) {
+                ##returns 0 rows for this state if there is not a hospital with requested rating
+            }
+        }
+    #return(subState)
+    return(final)
     }
 ## end outcome heart failure
     if (outcome == "pneumonia") {
-
-
+        x <- vector("numeric",length=length(unique_States))
+        for (i in 1:length(unique_States)) {
+            ##check to make sure there is a hospital with the requested ranking
+            noHospWithNumRank <- tryCatch(
+                x[i] <- which(subState[[i]]["PN.Rank"]==num),
+                error=function(e) e
+            )
+            if(!inherits(noHospWithNumRank, "error")) {
+                ##returns 0 rows for this state if there is not a hospital with requested rating
+            }
+        }
+        final <- data.frame(hospital=character(),state=character(),stringsAsFactors=FALSE)
+        for (i in 1: length(x)) {
+            subState[[i]] <- subState[[i]][x[i],1:2]
+            noHospWithNumRank <- tryCatch(
+                final[i,] <- subState[[i]],
+                error=function(e) e
+            )
+            if(!inherits(noHospWithNumRank, "error")) {
+                ##returns 0 rows for this state if there is not a hospital with requested rating
+            }
+        }
+    return(final)
     }
 ## end outcome pneumonia
 ## End the ranking by outcome
